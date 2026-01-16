@@ -6,11 +6,11 @@
     <errorConditionFormula>AND(
     NOT(ISBLANK(HomePhone)),
     OR(
-        LEN(HomePhone) &lt; 7,
-        LEN(HomePhone) &gt; 40,
-        NOT(REGEX(HomePhone, &quot;^[0-9\\s\\-\\(\\)\\+\\.]+$&quot;))
+        LEN(HomePhone) &lt; 8,
+        LEN(HomePhone) &gt; 50,
+        NOT(REGEX(HomePhone, &quot;^\\+[0-9\\s\\-\\(\\)\\.]+([xX]|ext|extension|;|,)?\\s*[0-9]*$&quot;))
     )
 )</errorConditionFormula>
     <errorDisplayField>HomePhone</errorDisplayField>
-    <errorMessage>Home phone number must be between 7 and 40 characters and contain only digits, spaces, hyphens, parentheses, plus signs, or periods.</errorMessage>
+    <errorMessage>Home phone must start with + (country code), be 8-50 characters, and can include extensions (x123, ext 123, ;123, or ,123).</errorMessage>
 </ValidationRule>

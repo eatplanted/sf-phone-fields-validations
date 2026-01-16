@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <assignments>
+        <name>Standardize_Phone</name>
+        <label>Standardize Phone</label>
+        <locationX>176</locationX>
+        <locationY>278</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Phone</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>fx_StandardizedPhone</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_MobilePhone</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Standardize_MobilePhone</name>
+        <label>Standardize MobilePhone</label>
+        <locationX>176</locationX>
+        <locationY>494</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.MobilePhone</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>fx_StandardizedMobilePhone</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_HomePhone</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Standardize_HomePhone</name>
+        <label>Standardize HomePhone</label>
+        <locationX>176</locationX>
+        <locationY>710</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.HomePhone</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>fx_StandardizedHomePhone</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_OtherPhone</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Standardize_OtherPhone</name>
+        <label>Standardize OtherPhone</label>
+        <locationX>176</locationX>
+        <locationY>926</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.OtherPhone</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>fx_StandardizedOtherPhone</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_AssistantPhone</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Standardize_AssistantPhone</name>
+        <label>Standardize AssistantPhone</label>
+        <locationX>176</locationX>
+        <locationY>1142</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.AssistantPhone</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>fx_StandardizedAssistantPhone</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Fax</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Standardize_Fax</name>
+        <label>Standardize Fax</label>
+        <locationX>176</locationX>
+        <locationY>1358</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Fax</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>fx_StandardizedFax</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <name>Check_Phone</name>
+        <label>Check Phone</label>
+        <locationX>182</locationX>
+        <locationY>158</locationY>
+        <defaultConnectorLabel>No Extension Text</defaultConnectorLabel>
+        <rules>
+            <name>Has_Extension_Text</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Phone</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue> x</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Phone</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue> X</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Phone</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue> ext</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Phone</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue> extension</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Standardize_Phone</targetReference>
+            </connector>
+            <label>Has Extension Text</label>
+        </rules>
+        <defaultConnector>
+            <targetReference>Check_MobilePhone</targetReference>
+        </defaultConnector>
+    </decisions>
+    <decisions>
+        <name>Check_MobilePhone</name>
+        <label>Check MobilePhone</label>
+        <locationX>182</locationX>
+        <locationY>374</locationY>
+        <defaultConnectorLabel>No Extension Text</defaultConnectorLabel>
+        <rules>
+            <name>MobileHas_Extension_Text</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.MobilePhone</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue> x</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.MobilePhone</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue> X</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.MobilePhone</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue> ext</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.MobilePhone</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue> extension</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Standardize_MobilePhone</targetReference>
+            </connector>
+            <label>Has Extension Text</label>
+        </rules>
+        <defaultConnector>
+            <targetReference>Check_HomePhone</targetReference>
+        </defaultConnector>
+    </decisions>
+    <decisions>
+        <name>Check_HomePhone</name>
+        <label>Check HomePhone</label>
+        <locationX>182</locationX>
+        <locationY>590</locationY>
+        <defaultConnectorLabel>No Extension Text</defaultConnectorLabel>
+        <rules>
+            <name>HomeHas_Extension_Text</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.HomePhone</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue> x</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.HomePhone</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue> X</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.HomePhone</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue> ext</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.HomePhone</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue> extension</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Standardize_HomePhone</targetReference>
+            </connector>
+            <label>Has Extension Text</label>
+        </rules>
+        <defaultConnector>
+            <targetReference>Check_OtherPhone</targetReference>
+        </defaultConnector>
+    </decisions>
+    <decisions>
+        <name>Check_OtherPhone</name>
+        <label>Check OtherPhone</label>
+        <locationX>182</locationX>
+        <locationY>806</locationY>
+        <defaultConnectorLabel>No Extension Text</defaultConnectorLabel>
+        <rules>
+            <name>OtherHas_Extension_Text</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.OtherPhone</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue> x</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.OtherPhone</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue> X</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.OtherPhone</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue> ext</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.OtherPhone</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue> extension</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Standardize_OtherPhone</targetReference>
+            </connector>
+            <label>Has Extension Text</label>
+        </rules>
+        <defaultConnector>
+            <targetReference>Check_AssistantPhone</targetReference>
+        </defaultConnector>
+    </decisions>
+    <decisions>
+        <name>Check_AssistantPhone</name>
+        <label>Check AssistantPhone</label>
+        <locationX>182</locationX>
+        <locationY>1022</locationY>
+        <defaultConnectorLabel>No Extension Text</defaultConnectorLabel>
+        <rules>
+            <name>AssistantHas_Extension_Text</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.AssistantPhone</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue> x</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.AssistantPhone</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue> X</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.AssistantPhone</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue> ext</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.AssistantPhone</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue> extension</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Standardize_AssistantPhone</targetReference>
+            </connector>
+            <label>Has Extension Text</label>
+        </rules>
+        <defaultConnector>
+            <targetReference>Check_Fax</targetReference>
+        </defaultConnector>
+    </decisions>
+    <decisions>
+        <name>Check_Fax</name>
+        <label>Check Fax</label>
+        <locationX>182</locationX>
+        <locationY>1238</locationY>
+        <defaultConnectorLabel>No Extension Text</defaultConnectorLabel>
+        <rules>
+            <name>FaxHas_Extension_Text</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Fax</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue> x</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Fax</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue> X</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Fax</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue> ext</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Fax</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue> extension</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Standardize_Fax</targetReference>
+            </connector>
+            <label>Has Extension Text</label>
+        </rules>
+    </decisions>
+    <description>Automatically standardizes phone extensions to RFC 3966 format (semicolon) before saving Contact records</description>
+    <formulas>
+        <name>fx_StandardizedPhone</name>
+        <dataType>String</dataType>
+        <expression>SUBSTITUTE(
+    SUBSTITUTE(
+        SUBSTITUTE(
+            SUBSTITUTE(
+                {!$Record.Phone},
+                &quot; x&quot;, &quot;;&quot;
+            ),
+            &quot; X&quot;, &quot;;&quot;
+        ),
+        &quot; ext &quot;, &quot;;&quot;
+    ),
+    &quot; extension &quot;, &quot;;&quot;
+)</expression>
+    </formulas>
+    <formulas>
+        <name>fx_StandardizedMobilePhone</name>
+        <dataType>String</dataType>
+        <expression>SUBSTITUTE(
+    SUBSTITUTE(
+        SUBSTITUTE(
+            SUBSTITUTE(
+                {!$Record.MobilePhone},
+                &quot; x&quot;, &quot;;&quot;
+            ),
+            &quot; X&quot;, &quot;;&quot;
+        ),
+        &quot; ext &quot;, &quot;;&quot;
+    ),
+    &quot; extension &quot;, &quot;;&quot;
+)</expression>
+    </formulas>
+    <formulas>
+        <name>fx_StandardizedHomePhone</name>
+        <dataType>String</dataType>
+        <expression>SUBSTITUTE(
+    SUBSTITUTE(
+        SUBSTITUTE(
+            SUBSTITUTE(
+                {!$Record.HomePhone},
+                &quot; x&quot;, &quot;;&quot;
+            ),
+            &quot; X&quot;, &quot;;&quot;
+        ),
+        &quot; ext &quot;, &quot;;&quot;
+    ),
+    &quot; extension &quot;, &quot;;&quot;
+)</expression>
+    </formulas>
+    <formulas>
+        <name>fx_StandardizedOtherPhone</name>
+        <dataType>String</dataType>
+        <expression>SUBSTITUTE(
+    SUBSTITUTE(
+        SUBSTITUTE(
+            SUBSTITUTE(
+                {!$Record.OtherPhone},
+                &quot; x&quot;, &quot;;&quot;
+            ),
+            &quot; X&quot;, &quot;;&quot;
+        ),
+        &quot; ext &quot;, &quot;;&quot;
+    ),
+    &quot; extension &quot;, &quot;;&quot;
+)</expression>
+    </formulas>
+    <formulas>
+        <name>fx_StandardizedAssistantPhone</name>
+        <dataType>String</dataType>
+        <expression>SUBSTITUTE(
+    SUBSTITUTE(
+        SUBSTITUTE(
+            SUBSTITUTE(
+                {!$Record.AssistantPhone},
+                &quot; x&quot;, &quot;;&quot;
+            ),
+            &quot; X&quot;, &quot;;&quot;
+        ),
+        &quot; ext &quot;, &quot;;&quot;
+    ),
+    &quot; extension &quot;, &quot;;&quot;
+)</expression>
+    </formulas>
+    <formulas>
+        <name>fx_StandardizedFax</name>
+        <dataType>String</dataType>
+        <expression>SUBSTITUTE(
+    SUBSTITUTE(
+        SUBSTITUTE(
+            SUBSTITUTE(
+                {!$Record.Fax},
+                &quot; x&quot;, &quot;;&quot;
+            ),
+            &quot; X&quot;, &quot;;&quot;
+        ),
+        &quot; ext &quot;, &quot;;&quot;
+    ),
+    &quot; extension &quot;, &quot;;&quot;
+)</expression>
+    </formulas>
+    <interviewLabel>Contact - Standardize Phone Extensions {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Contact - Standardize Phone Extensions</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_Phone</targetReference>
+        </connector>
+        <object>Contact</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

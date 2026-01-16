@@ -6,11 +6,11 @@
     <errorConditionFormula>AND(
     NOT(ISBLANK(ContactFax)),
     OR(
-        LEN(ContactFax) &lt; 7,
-        LEN(ContactFax) &gt; 40,
-        NOT(REGEX(ContactFax, &quot;^[0-9\\s\\-\\(\\)\\+\\.]+$&quot;))
+        LEN(ContactFax) &lt; 8,
+        LEN(ContactFax) &gt; 50,
+        NOT(REGEX(ContactFax, &quot;^\\+[0-9\\s\\-\\(\\)\\.]+([xX]|ext|extension|;|,)?\\s*[0-9]*$&quot;))
     )
 )</errorConditionFormula>
     <errorDisplayField>ContactFax</errorDisplayField>
-    <errorMessage>Contact fax number must be between 7 and 40 characters and contain only digits, spaces, hyphens, parentheses, plus signs, or periods.</errorMessage>
+    <errorMessage>Contact fax must start with + (country code), be 8-50 characters, and can include extensions (x123, ext 123, ;123, or ,123).</errorMessage>
 </ValidationRule>

@@ -6,11 +6,11 @@
     <errorConditionFormula>AND(
     NOT(ISBLANK(ContactPhone)),
     OR(
-        LEN(ContactPhone) &lt; 7,
-        LEN(ContactPhone) &gt; 40,
-        NOT(REGEX(ContactPhone, &quot;^[0-9\\s\\-\\(\\)\\+\\.]+$&quot;))
+        LEN(ContactPhone) &lt; 8,
+        LEN(ContactPhone) &gt; 50,
+        NOT(REGEX(ContactPhone, &quot;^\\+[0-9\\s\\-\\(\\)\\.]+([xX]|ext|extension|;|,)?\\s*[0-9]*$&quot;))
     )
 )</errorConditionFormula>
     <errorDisplayField>ContactPhone</errorDisplayField>
-    <errorMessage>Contact phone number must be between 7 and 40 characters and contain only digits, spaces, hyphens, parentheses, plus signs, or periods.</errorMessage>
+    <errorMessage>Contact phone must start with + (country code), be 8-50 characters, and can include extensions (x123, ext 123, ;123, or ,123).</errorMessage>
 </ValidationRule>

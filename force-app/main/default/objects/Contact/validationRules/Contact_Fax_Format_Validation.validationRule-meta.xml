@@ -6,11 +6,11 @@
     <errorConditionFormula>AND(
     NOT(ISBLANK(Fax)),
     OR(
-        LEN(Fax) &lt; 7,
-        LEN(Fax) &gt; 40,
-        NOT(REGEX(Fax, &quot;^[0-9\\s\\-\\(\\)\\+\\.]+$&quot;))
+        LEN(Fax) &lt; 8,
+        LEN(Fax) &gt; 50,
+        NOT(REGEX(Fax, &quot;^\\+[0-9\\s\\-\\(\\)\\.]+([xX]|ext|extension|;|,)?\\s*[0-9]*$&quot;))
     )
 )</errorConditionFormula>
     <errorDisplayField>Fax</errorDisplayField>
-    <errorMessage>Fax number must be between 7 and 40 characters and contain only digits, spaces, hyphens, parentheses, plus signs, or periods.</errorMessage>
+    <errorMessage>Fax must start with + (country code), be 8-50 characters, and can include extensions (x123, ext 123, ;123, or ,123).</errorMessage>
 </ValidationRule>

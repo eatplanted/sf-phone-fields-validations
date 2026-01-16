@@ -6,11 +6,11 @@
     <errorConditionFormula>AND(
     NOT(ISBLANK(OtherPhone)),
     OR(
-        LEN(OtherPhone) &lt; 7,
-        LEN(OtherPhone) &gt; 40,
-        NOT(REGEX(OtherPhone, &quot;^[0-9\\s\\-\\(\\)\\+\\.]+$&quot;))
+        LEN(OtherPhone) &lt; 8,
+        LEN(OtherPhone) &gt; 50,
+        NOT(REGEX(OtherPhone, &quot;^\\+[0-9\\s\\-\\(\\)\\.]+([xX]|ext|extension|;|,)?\\s*[0-9]*$&quot;))
     )
 )</errorConditionFormula>
     <errorDisplayField>OtherPhone</errorDisplayField>
-    <errorMessage>Other phone number must be between 7 and 40 characters and contain only digits, spaces, hyphens, parentheses, plus signs, or periods.</errorMessage>
+    <errorMessage>Other phone must start with + (country code), be 8-50 characters, and can include extensions (x123, ext 123, ;123, or ,123).</errorMessage>
 </ValidationRule>
