@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Type_of_Food__c</fullName>
+    <label>Type of Food</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Breakfast</fullName>
+                <default>false</default>
+                <label>Breakfast</label>
+            </value>
+            <value>
+                <fullName>Starter</fullName>
+                <default>false</default>
+                <label>Starter</label>
+            </value>
+            <value>
+                <fullName>Main Course</fullName>
+                <default>false</default>
+                <label>Main Course</label>
+            </value>
+            <value>
+                <fullName>Pasta Dishes</fullName>
+                <default>false</default>
+                <label>Pasta Dishes</label>
+            </value>
+            <value>
+                <fullName>Potato Dishes</fullName>
+                <default>false</default>
+                <label>Potato Dishes</label>
+            </value>
+            <value>
+                <fullName>Rice dishes</fullName>
+                <default>false</default>
+                <label>Rice dishes</label>
+            </value>
+            <value>
+                <fullName>Wraps</fullName>
+                <default>false</default>
+                <label>Wraps</label>
+            </value>
+            <value>
+                <fullName>Bowls</fullName>
+                <default>false</default>
+                <label>Bowls</label>
+            </value>
+            <value>
+                <fullName>Burgers</fullName>
+                <default>false</default>
+                <label>Burgers</label>
+            </value>
+            <value>
+                <fullName>Salads</fullName>
+                <default>false</default>
+                <label>Salads</label>
+            </value>
+            <value>
+                <fullName>Snacks</fullName>
+                <default>false</default>
+                <label>Snacks</label>
+            </value>
+            <value>
+                <fullName>Fingerfood</fullName>
+                <default>false</default>
+                <label>Fingerfood</label>
+            </value>
+            <value>
+                <fullName>Cold served dishes</fullName>
+                <default>false</default>
+                <label>Cold served dishes</label>
+            </value>
+            <value>
+                <fullName>Condiments/Sauces</fullName>
+                <default>false</default>
+                <label>Condiments/Sauces</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>5</visibleLines>
+</CustomField>

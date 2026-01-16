@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Recipe_segment__c</fullName>
+    <description>Segment of the dish that this ingredient belongs too (sauce, marinade...)</description>
+    <externalId>false</externalId>
+    <inlineHelpText>It will be displayed as a subtitle before the ingredients that share the same value.
+If no segment is specified, you can leave it empty.
+
+Note: This field is free text. Make sure there are no mistakes; otherwise, it won’t be displayed as intended. (Use copy/paste for the same segment across different ingredients.)</inlineHelpText>
+    <label>Recipe segment</label>
+    <length>255</length>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

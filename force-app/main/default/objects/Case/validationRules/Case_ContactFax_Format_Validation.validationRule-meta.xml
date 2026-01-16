@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Case_ContactFax_Format_Validation</fullName>
+    <active>true</active>
+    <description>Validates that the ContactFax field contains only valid phone number characters and has a minimum length</description>
+    <errorConditionFormula>AND(
+    NOT(ISBLANK(ContactFax)),
+    OR(
+        LEN(ContactFax) &lt; 7,
+        LEN(ContactFax) &gt; 40,
+        NOT(REGEX(ContactFax, &quot;^[0-9\\s\\-\\(\\)\\+\\.]+$&quot;))
+    )
+)</errorConditionFormula>
+    <errorDisplayField>ContactFax</errorDisplayField>
+    <errorMessage>Contact fax number must be between 7 and 40 characters and contain only digits, spaces, hyphens, parentheses, plus signs, or periods.</errorMessage>
+</ValidationRule>

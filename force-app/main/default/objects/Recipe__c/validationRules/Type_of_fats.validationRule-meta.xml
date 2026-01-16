@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Type_of_fats</fullName>
+    <active>true</active>
+    <errorConditionFormula>Saturated_fats__c &gt; Fats__c</errorConditionFormula>
+    <errorDisplayField>Saturated_fats__c</errorDisplayField>
+    <errorMessage>Saturated fats can&apos;t be bigger than all fats</errorMessage>
+</ValidationRule>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lead_Phone_Format_Validation</fullName>
+    <active>true</active>
+    <description>Validates that the Phone field contains only valid phone number characters and has a minimum length</description>
+    <errorConditionFormula>AND(
+    NOT(ISBLANK(Phone)),
+    OR(
+        LEN(Phone) &lt; 7,
+        LEN(Phone) &gt; 40,
+        NOT(REGEX(Phone, &quot;^[0-9\\s\\-\\(\\)\\+\\.]+$&quot;))
+    )
+)</errorConditionFormula>
+    <errorDisplayField>Phone</errorDisplayField>
+    <errorMessage>Phone number must be between 7 and 40 characters and contain only digits, spaces, hyphens, parentheses, plus signs, or periods.</errorMessage>
+</ValidationRule>

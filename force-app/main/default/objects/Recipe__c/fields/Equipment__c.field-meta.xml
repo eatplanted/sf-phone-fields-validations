@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Equipment__c</fullName>
+    <label>Equipment</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Oven</fullName>
+                <default>false</default>
+                <label>Oven</label>
+            </value>
+            <value>
+                <fullName>Pan</fullName>
+                <default>false</default>
+                <label>Pan</label>
+            </value>
+            <value>
+                <fullName>Spatula</fullName>
+                <default>false</default>
+                <label>Spatula</label>
+            </value>
+            <value>
+                <fullName>Deep Fryer</fullName>
+                <default>false</default>
+                <label>Deep Fryer</label>
+            </value>
+            <value>
+                <fullName>Air Fryer</fullName>
+                <default>false</default>
+                <label>Air Fryer</label>
+            </value>
+            <value>
+                <fullName>Pot</fullName>
+                <default>false</default>
+                <label>Pot</label>
+            </value>
+            <value>
+                <fullName>Sous-vide Appliance</fullName>
+                <default>false</default>
+                <label>Sous-vide Appliance</label>
+            </value>
+            <value>
+                <fullName>BBQ</fullName>
+                <default>false</default>
+                <label>BBQ</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Contact_AssistantPhone_Format_Validation</fullName>
+    <active>true</active>
+    <description>Validates that the AssistantPhone field contains only valid phone number characters and has a minimum length</description>
+    <errorConditionFormula>AND(
+    NOT(ISBLANK(AssistantPhone)),
+    OR(
+        LEN(AssistantPhone) &lt; 7,
+        LEN(AssistantPhone) &gt; 40,
+        NOT(REGEX(AssistantPhone, &quot;^[0-9\\s\\-\\(\\)\\+\\.]+$&quot;))
+    )
+)</errorConditionFormula>
+    <errorDisplayField>AssistantPhone</errorDisplayField>
+    <errorMessage>Assistant phone number must be between 7 and 40 characters and contain only digits, spaces, hyphens, parentheses, plus signs, or periods.</errorMessage>
+</ValidationRule>

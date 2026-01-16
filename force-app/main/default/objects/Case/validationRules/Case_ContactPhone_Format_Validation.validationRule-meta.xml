@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Case_ContactPhone_Format_Validation</fullName>
+    <active>true</active>
+    <description>Validates that the ContactPhone field contains only valid phone number characters and has a minimum length</description>
+    <errorConditionFormula>AND(
+    NOT(ISBLANK(ContactPhone)),
+    OR(
+        LEN(ContactPhone) &lt; 7,
+        LEN(ContactPhone) &gt; 40,
+        NOT(REGEX(ContactPhone, &quot;^[0-9\\s\\-\\(\\)\\+\\.]+$&quot;))
+    )
+)</errorConditionFormula>
+    <errorDisplayField>ContactPhone</errorDisplayField>
+    <errorMessage>Contact phone number must be between 7 and 40 characters and contain only digits, spaces, hyphens, parentheses, plus signs, or periods.</errorMessage>
+</ValidationRule>

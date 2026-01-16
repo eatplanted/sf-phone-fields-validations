@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Contact_HomePhone_Format_Validation</fullName>
+    <active>true</active>
+    <description>Validates that the HomePhone field contains only valid phone number characters and has a minimum length</description>
+    <errorConditionFormula>AND(
+    NOT(ISBLANK(HomePhone)),
+    OR(
+        LEN(HomePhone) &lt; 7,
+        LEN(HomePhone) &gt; 40,
+        NOT(REGEX(HomePhone, &quot;^[0-9\\s\\-\\(\\)\\+\\.]+$&quot;))
+    )
+)</errorConditionFormula>
+    <errorDisplayField>HomePhone</errorDisplayField>
+    <errorMessage>Home phone number must be between 7 and 40 characters and contain only digits, spaces, hyphens, parentheses, plus signs, or periods.</errorMessage>
+</ValidationRule>

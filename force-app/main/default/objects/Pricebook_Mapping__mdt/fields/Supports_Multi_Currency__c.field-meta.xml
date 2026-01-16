@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Supports_Multi_Currency__c</fullName>
+    <defaultValue>false</defaultValue>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <inlineHelpText>TRUE for Industry/global channels</inlineHelpText>
+    <label>Supports Multi Currency</label>
+    <type>Checkbox</type>
+</CustomField>

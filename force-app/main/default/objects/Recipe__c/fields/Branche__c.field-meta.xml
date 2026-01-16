@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Branche__c</fullName>
+    <label>Branche</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Coffee Shop</fullName>
+                <default>false</default>
+                <label>Coffee Shop</label>
+            </value>
+            <value>
+                <fullName>Bakery</fullName>
+                <default>false</default>
+                <label>Bakery</label>
+            </value>
+            <value>
+                <fullName>Snacks/Sandwich</fullName>
+                <default>false</default>
+                <label>Snacks/Sandwich</label>
+            </value>
+            <value>
+                <fullName>Roadside</fullName>
+                <default>false</default>
+                <label>Roadside</label>
+            </value>
+            <value>
+                <fullName>Railway</fullName>
+                <default>false</default>
+                <label>Railway</label>
+            </value>
+            <value>
+                <fullName>Airline / Airport</fullName>
+                <default>false</default>
+                <label>Airline / Airport</label>
+            </value>
+            <value>
+                <fullName>Ship / Port</fullName>
+                <default>false</default>
+                <label>Ship / Port</label>
+            </value>
+            <value>
+                <fullName>Sportsclub / Gym</fullName>
+                <default>false</default>
+                <label>Sportsclub / Gym</label>
+            </value>
+            <value>
+                <fullName>Sports Venue</fullName>
+                <default>false</default>
+                <label>Sports Venue</label>
+            </value>
+            <value>
+                <fullName>Visitor Attraction</fullName>
+                <default>false</default>
+                <label>Visitor Attraction</label>
+            </value>
+            <value>
+                <fullName>Entertainment Venue</fullName>
+                <default>false</default>
+                <label>Entertainment Venue</label>
+            </value>
+            <value>
+                <fullName>Camping</fullName>
+                <default>false</default>
+                <label>Camping</label>
+            </value>
+            <value>
+                <fullName>Swimming / Public Pool</fullName>
+                <default>false</default>
+                <label>Swimming / Public Pool</label>
+            </value>
+            <value>
+                <fullName>Independent Hotels</fullName>
+                <default>false</default>
+                <label>Independent Hotels</label>
+            </value>
+            <value>
+                <fullName>Branded Hotels</fullName>
+                <default>false</default>
+                <label>Branded Hotels</label>
+            </value>
+            <value>
+                <fullName>Independent restaurant</fullName>
+                <default>false</default>
+                <label>Independent restaurant</label>
+            </value>
+            <value>
+                <fullName>Fine Dining</fullName>
+                <default>false</default>
+                <label>Fine Dining</label>
+            </value>
+            <value>
+                <fullName>Branded Restaurant</fullName>
+                <default>false</default>
+                <label>Branded Restaurant</label>
+            </value>
+            <value>
+                <fullName>Bars &amp; Pubs</fullName>
+                <default>false</default>
+                <label>Bars &amp; Pubs</label>
+            </value>
+            <value>
+                <fullName>Lighthouse Restaurant</fullName>
+                <default>false</default>
+                <label>Lighthouse Restaurant</label>
+            </value>
+            <value>
+                <fullName>Buffet / Self-Service</fullName>
+                <default>false</default>
+                <label>Buffet / Self-Service</label>
+            </value>
+            <value>
+                <fullName>Branded Traditional</fullName>
+                <default>false</default>
+                <label>Branded Traditional</label>
+            </value>
+            <value>
+                <fullName>Branded Emerging</fullName>
+                <default>false</default>
+                <label>Branded Emerging</label>
+            </value>
+            <value>
+                <fullName>Street Food / Independent</fullName>
+                <default>false</default>
+                <label>Street Food / Independent</label>
+            </value>
+            <value>
+                <fullName>Business Catering</fullName>
+                <default>false</default>
+                <label>Business Catering</label>
+            </value>
+            <value>
+                <fullName>Contract Catering</fullName>
+                <default>false</default>
+                <label>Contract Catering</label>
+            </value>
+            <value>
+                <fullName>Event Catering</fullName>
+                <default>false</default>
+                <label>Event Catering</label>
+            </value>
+            <value>
+                <fullName>Education</fullName>
+                <default>false</default>
+                <label>Education</label>
+            </value>
+            <value>
+                <fullName>Healthcare</fullName>
+                <default>false</default>
+                <label>Healthcare</label>
+            </value>
+            <value>
+                <fullName>Defense / Army</fullName>
+                <default>false</default>
+                <label>Defense / Army</label>
+            </value>
+            <value>
+                <fullName>Quick service restaurants</fullName>
+                <default>false</default>
+                <label>Quick service restaurants</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+            <value>
+                <fullName>Communal catering</fullName>
+                <default>false</default>
+                <label>Communal catering</label>
+            </value>
+            <value>
+                <fullName>Child care &amp; school catering</fullName>
+                <default>false</default>
+                <label>Child care &amp; school catering</label>
+            </value>
+            <value>
+                <fullName>Health care catering</fullName>
+                <default>false</default>
+                <label>Health care catering</label>
+            </value>
+            <value>
+                <fullName>Individual restaurants</fullName>
+                <default>false</default>
+                <label>Individual restaurants</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>6</visibleLines>
+</CustomField>
