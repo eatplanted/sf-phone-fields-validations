@@ -136,7 +136,9 @@ private class PhoneNumberUtilTest {
             Name = 'Test Company',
             Phone = '+41 44 123 4567x100',
             Fax = '+41 44 987 6543 ext 200',
-            BillingCountry = 'Switzerland'
+            BillingCountry = 'Switzerland',
+            SalesChannelPick__c = 'Retail',
+            SubChannelPick__c = 'Supermarket'
         );
         
         Test.startTest();
@@ -186,8 +188,8 @@ private class PhoneNumberUtilTest {
             Phone = '+41 44 123 4567x500',
             MobilePhone = '+41 79 234 5678 ext 600',
             Fax = '+41 44 987 6543,700',
-            SalesChannelPick__c = 'Direct',
-            SubChannelPick__c = 'Online'
+            SalesChannelPick__c = 'Retail',
+            SubChannelPick__c = 'Supermarket'
         );
         
         Test.startTest();
