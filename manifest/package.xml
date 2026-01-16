@@ -18,8 +18,8 @@
     
     <!-- Account Validation Rules -->
     <types>
-        <members>Account_Phone_Format_Validation</members>
-        <members>Account_Fax_Format_Validation</members>
+        <members>Account.Phone_Format_Validation</members>
+        <members>Account.Fax_Format_Validation</members>
         <name>ValidationRule</name>
     </types>
     
