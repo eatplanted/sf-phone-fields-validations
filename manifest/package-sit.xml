@@ -7,12 +7,11 @@
         <name>ApexClass</name>
     </types>
     
-    <!-- Apex Triggers -->
+    <!-- Apex Triggers (excluding Case) -->
     <types>
         <members>AccountPhoneTrigger</members>
         <members>ContactPhoneTrigger</members>
         <members>LeadPhoneTrigger</members>
-        <members>CasePhoneTrigger</members>
         <name>ApexTrigger</name>
     </types>
     
@@ -42,13 +41,7 @@
         <name>ValidationRule</name>
     </types>
     
-    <!-- Case Validation Rules -->
-    <types>
-        <members>Case.Case_ContactPhone_Format_Validation</members>
-        <members>Case.Case_ContactMobile_Format_Validation</members>
-        <members>Case.Case_ContactFax_Format_Validation</members>
-        <name>ValidationRule</name>
-    </types>
+    <!-- Note: Case components excluded - fields not available in SIT -->
     
     <version>62.0</version>
 </Package>
