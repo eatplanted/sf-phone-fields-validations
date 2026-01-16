@@ -40,8 +40,7 @@ public class PhoneNumberUtil {
         }
         
         // Must start with + and digit, 7-50 chars total
-        String pattern = '^\\+\\d[\\d\\s\\-\\(\\)\\.]{5,48}(;\\d{1,10})?$';
-        Pattern p = Pattern.compile(pattern);
-        return p.matcher(phoneNumber).matches();
+        String regex = '^\\+\\d[\\d\\s\\-\\(\\)\\.]{5,48}(;\\d{1,10})?$';
+        return phoneNumber.matches(regex);  // ✅ CORRECT - Use String.matches()
     }
 }

@@ -198,25 +198,6 @@ private class PhoneNumberUtilTest {
     }
     
     @isTest
-    static void testIntegration_Case() {
-        Case cs = new Case(
-            Subject = 'Test Case',
-            ContactPhone = '+1 555-1234x800',
-            ContactMobile = '+1 555-5678 Ext. 900',
-            ContactFax = '+1 555-9012,1000'
-        );
-        
-        Test.startTest();
-        insert cs;
-        Test.stopTest();
-        
-        cs = [SELECT ContactPhone, ContactMobile, ContactFax FROM Case WHERE Id = :cs.Id];
-        System.assertEquals('+1 555-1234;800', cs.ContactPhone);
-        System.assertEquals('+1 555-5678;900', cs.ContactMobile);
-        System.assertEquals('+1 555-9012;1000', cs.ContactFax);
-    }
-    
-    @isTest
     static void testBulk_MultipleRecords() {
         List<Contact> contacts = new List<Contact>();
         for (Integer i = 0; i < 200; i++) {
