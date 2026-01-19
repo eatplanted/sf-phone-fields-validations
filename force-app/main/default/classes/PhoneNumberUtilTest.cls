@@ -119,9 +119,19 @@ private class PhoneNumberUtilTest {
 
     @isTest
     static void testStandardizeExtension_FormattingCleanup() {
-        System.assertEquals('+41 (44) 333-4455;890', 
+        System.assertEquals('+41 (44) 333-4455;890',
             PhoneNumberUtil.standardizeExtension('+41 ( 44 ) 333 - 4455 ext 890'),
             'Should clean up extra spaces in formatting');
+    }
+
+    @isTest
+    static void testStandardizeExtension_DoublePlus() {
+        System.assertEquals('+41 44 123 4567',
+            PhoneNumberUtil.standardizeExtension('++41 44 123 4567'),
+            '++ should be replaced with +');
+        System.assertEquals('+1 555 123 4567',
+            PhoneNumberUtil.standardizeExtension('++1 555 123 4567'),
+            '++ at start should be replaced with +');
     }
     
     @isTest
@@ -154,6 +164,12 @@ private class PhoneNumberUtilTest {
 
     @isTest
     static void testIsValidFormat_DummyNumbers() {
+        // All zeros - should be invalid regardless of country code
+        System.assert(!PhoneNumberUtil.isValidFormat('+0000000000'),
+            'All zeros should be invalid');
+        System.assert(!PhoneNumberUtil.isValidFormat('+00 000 0000'),
+            'All zeros with spaces should be invalid');
+
         // Local number (after first 3 digits) all same digit - should be invalid
         // +41 00 000 0000 -> digits 41000000000 -> skip 410 -> local 00000000 (all zeros)
         System.assert(!PhoneNumberUtil.isValidFormat('+41 00 000 0000'),
@@ -264,17 +280,151 @@ private class PhoneNumberUtilTest {
                 Phone = '+41 44 ' + Math.mod(i, 999) + ' ' + Math.mod(i * 2, 9999) + 'x' + i
             ));
         }
-        
+
         Test.startTest();
         insert contacts;
         Test.stopTest();
-        
+
         contacts = [SELECT Phone FROM Contact WHERE LastName LIKE 'Test%' ORDER BY LastName];
         System.assertEquals(200, contacts.size(), 'Should insert 200 contacts');
-        
+
         for (Contact c : contacts) {
-            System.assert(c.Phone.contains(';'), 
+            System.assert(c.Phone.contains(';'),
                 'All phone numbers should be standardized with semicolon');
         }
+    }
+
+    @isTest
+    static void testCountryCodeValidation_WithCountryRecords() {
+        // Create test country records with phone codes
+        List<Country__c> countries = new List<Country__c>{
+            new Country__c(Name = 'Switzerland', ISO_Code__c = 'CH', Phone_Country_Code__c = '41'),
+            new Country__c(Name = 'Germany', ISO_Code__c = 'DE', Phone_Country_Code__c = '49'),
+            new Country__c(Name = 'United States', ISO_Code__c = 'US', Phone_Country_Code__c = '1'),
+            new Country__c(Name = 'United Kingdom', ISO_Code__c = 'GB', Phone_Country_Code__c = '44')
+        };
+        insert countries;
+
+        // Clear cache to pick up new records
+        PhoneNumberUtil.clearCache();
+
+        Test.startTest();
+
+        // Valid country codes should pass
+        System.assert(PhoneNumberUtil.isValidFormat('+41 44 123 4567'),
+            'Swiss number with valid country code should be valid');
+        System.assert(PhoneNumberUtil.isValidFormat('+49 30 123 4567'),
+            'German number with valid country code should be valid');
+        System.assert(PhoneNumberUtil.isValidFormat('+1 555 123 4567'),
+            'US number with valid country code should be valid');
+        System.assert(PhoneNumberUtil.isValidFormat('+44 20 1234 5678'),
+            'UK number with valid country code should be valid');
+
+        // Invalid country codes should fail
+        System.assert(!PhoneNumberUtil.isValidFormat('+99 12 345 6789'),
+            'Number with invalid country code 99 should be invalid');
+        System.assert(!PhoneNumberUtil.isValidFormat('+123 456 7890'),
+            'Number with invalid country code 123 should be invalid');
+
+        Test.stopTest();
+    }
+
+    @isTest
+    static void testExtractCountryCode() {
+        // Create test country records
+        List<Country__c> countries = new List<Country__c>{
+            new Country__c(Name = 'Switzerland', ISO_Code__c = 'CH', Phone_Country_Code__c = '41'),
+            new Country__c(Name = 'United States', ISO_Code__c = 'US', Phone_Country_Code__c = '1'),
+            new Country__c(Name = 'Kazakhstan', ISO_Code__c = 'KZ', Phone_Country_Code__c = '7')
+        };
+        insert countries;
+
+        PhoneNumberUtil.clearCache();
+
+        Test.startTest();
+
+        // Test extraction
+        System.assertEquals('41', PhoneNumberUtil.extractCountryCode('+41 44 123 4567'),
+            'Should extract Swiss country code 41');
+        System.assertEquals('1', PhoneNumberUtil.extractCountryCode('+1 555 123 4567'),
+            'Should extract US country code 1');
+        System.assertEquals('7', PhoneNumberUtil.extractCountryCode('+7 777 123 4567'),
+            'Should extract Kazakhstan country code 7');
+
+        // Invalid cases
+        System.assertEquals(null, PhoneNumberUtil.extractCountryCode('+99 123 4567'),
+            'Should return null for invalid country code');
+        System.assertEquals(null, PhoneNumberUtil.extractCountryCode('41 44 123 4567'),
+            'Should return null for number without +');
+        System.assertEquals(null, PhoneNumberUtil.extractCountryCode(null),
+            'Should return null for null input');
+        System.assertEquals(null, PhoneNumberUtil.extractCountryCode(''),
+            'Should return null for empty string');
+
+        Test.stopTest();
+    }
+
+    @isTest
+    static void testHasValidCountryCode() {
+        // Create test country records
+        insert new Country__c(Name = 'Switzerland', ISO_Code__c = 'CH', Phone_Country_Code__c = '41');
+        PhoneNumberUtil.clearCache();
+
+        Test.startTest();
+
+        System.assert(PhoneNumberUtil.hasValidCountryCode('+41 44 123 4567'),
+            'Swiss number should have valid country code');
+        System.assert(!PhoneNumberUtil.hasValidCountryCode('+99 123 4567'),
+            'Number with code 99 should not have valid country code');
+
+        Test.stopTest();
+    }
+
+    @isTest
+    static void testDummyNumberWithCountryCode() {
+        // Create test country record for Switzerland (2-digit code)
+        insert new Country__c(Name = 'Switzerland', ISO_Code__c = 'CH', Phone_Country_Code__c = '41');
+        PhoneNumberUtil.clearCache();
+
+        Test.startTest();
+
+        // With country code 41 (2 digits), local part starts at position 2
+        // +41 00 000 0000 -> digits 41000000000 -> country code 41 -> local 000000000 (all zeros)
+        System.assert(!PhoneNumberUtil.isValidFormat('+41 00 000 0000'),
+            'Local part all zeros should be invalid');
+
+        // +41 11 111 1111 -> digits 41111111111 -> country code 41 -> local 111111111 (all ones)
+        System.assert(!PhoneNumberUtil.isValidFormat('+41 11 111 1111'),
+            'Local part all ones should be invalid');
+
+        // Valid number
+        System.assert(PhoneNumberUtil.isValidFormat('+41 44 123 4567'),
+            'Normal Swiss number should be valid');
+
+        Test.stopTest();
+    }
+
+    @isTest
+    static void testGetValidCountryCodes() {
+        // Create test country records
+        List<Country__c> countries = new List<Country__c>{
+            new Country__c(Name = 'Switzerland', ISO_Code__c = 'CH', Phone_Country_Code__c = '41'),
+            new Country__c(Name = 'No Code', ISO_Code__c = 'XX') // No phone code
+        };
+        insert countries;
+
+        PhoneNumberUtil.clearCache();
+
+        Test.startTest();
+
+        Set<String> codes = PhoneNumberUtil.getValidCountryCodes();
+        System.assertEquals(1, codes.size(), 'Should only return countries with phone codes');
+        System.assert(codes.contains('41'), 'Should contain Swiss code 41');
+
+        // Test caching - second call should return same set
+        Set<String> codes2 = PhoneNumberUtil.getValidCountryCodes();
+        System.assertEquals(codes, codes2, 'Cached codes should be returned');
+
+        Test.stopTest();
     }
 }
