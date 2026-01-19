@@ -154,13 +154,22 @@ private class PhoneNumberUtilTest {
 
     @isTest
     static void testIsValidFormat_DummyNumbers() {
-        // All same digit patterns - should be invalid
+        // Local number (after first 3 digits) all same digit - should be invalid
+        // +41 00 000 0000 -> digits 41000000000 -> skip 410 -> local 00000000 (all zeros)
         System.assert(!PhoneNumberUtil.isValidFormat('+41 00 000 0000'),
-            'All zeros should be invalid');
-        System.assert(!PhoneNumberUtil.isValidFormat('+11 11 111 1111'),
-            'All ones should be invalid');
-        System.assert(!PhoneNumberUtil.isValidFormat('+99 99 999 9999'),
-            'All nines should be invalid');
+            'Local part all zeros should be invalid');
+        // +41 11 111 1111 -> digits 41111111111 -> skip 411 -> local 11111111 (all ones)
+        System.assert(!PhoneNumberUtil.isValidFormat('+41 11 111 1111'),
+            'Local part all ones should be invalid');
+        // +1 999 999 9999 -> digits 19999999999 -> skip 199 -> local 99999999 (all nines)
+        System.assert(!PhoneNumberUtil.isValidFormat('+1 999 999 9999'),
+            'Local part all nines should be invalid');
+
+        // Valid country code with varied local number - should be valid
+        System.assert(PhoneNumberUtil.isValidFormat('+41 44 123 4567'),
+            'Normal Swiss number should be valid');
+        System.assert(PhoneNumberUtil.isValidFormat('+1 555 123 4567'),
+            'Normal US number should be valid');
 
         // Sequential patterns - should be valid (not blocked)
         System.assert(PhoneNumberUtil.isValidFormat('+12 34 567 8901'),
@@ -168,7 +177,7 @@ private class PhoneNumberUtilTest {
         System.assert(PhoneNumberUtil.isValidFormat('+98 76 543 2109'),
             'Sequential descending should be valid');
 
-        // Partial repetition - should be valid
+        // Partial repetition in local part - should be valid
         System.assert(PhoneNumberUtil.isValidFormat('+41 44 111 2233'),
             'Partial repetition should be valid');
     }

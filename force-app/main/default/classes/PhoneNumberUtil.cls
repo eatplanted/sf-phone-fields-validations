@@ -75,14 +75,24 @@ public class PhoneNumberUtil {
     }
 
     /**
-     * Checks if number contains all the same digit (0000000, 1111111, etc.)
+     * Checks if the local number (after country code) contains all the same digit
+     * Country codes are 1-3 digits, so we skip the first 3 digits and check the rest
      */
     private static Boolean isAllSameDigit(String digits) {
+        // Need at least 7 digits total (up to 3 for country code + at least 4 for local)
         if (digits.length() < 7) {
             return false;
         }
 
-        String firstDigit = digits.substring(0, 1);
-        return digits.replaceAll(firstDigit, '').length() == 0;
+        // Skip first 3 digits (max country code length) and check the rest
+        String localNumber = digits.substring(3);
+
+        // Need at least 4 digits in local part to check
+        if (localNumber.length() < 4) {
+            return false;
+        }
+
+        String firstDigit = localNumber.substring(0, 1);
+        return localNumber.replaceAll(firstDigit, '').length() == 0;
     }
 }
