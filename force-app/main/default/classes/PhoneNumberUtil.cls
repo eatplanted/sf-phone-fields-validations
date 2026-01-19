@@ -208,24 +208,28 @@ public class PhoneNumberUtil {
     
     /**
      * Validates phone number format
-     * - Must start with + followed by valid country code
+     * - Must start with + followed by digit
+     * - Must have valid country code (if country codes are configured)
      * - Minimum 7 digits
      * - Not a dummy number (all same digit in local part)
      */
     public static Boolean isValidFormat(String phoneNumber) {
+        // Allow null or blank
         if (String.isBlank(phoneNumber)) {
-            return true; // Blank is allowed
+            return true;
         }
 
-        // Must start with + and digit
+        // Must start with + and have at least one digit
         if (!phoneNumber.startsWith('+') || phoneNumber.length() < 2) {
             return false;
         }
 
-        // Extract only digits (excluding extension after semicolon)
+        // Extract main number (without extension)
         String mainNumber = phoneNumber.contains(';')
             ? phoneNumber.substring(0, phoneNumber.indexOf(';'))
             : phoneNumber;
+
+        // Extract digits only
         String digitsOnly = mainNumber.replaceAll('[^0-9]', '');
 
         // Minimum 7 digits required
@@ -233,33 +237,23 @@ public class PhoneNumberUtil {
             return false;
         }
 
-        // Check if entire number is all zeros (always invalid)
-        if (digitsOnly.replaceAll('0', '').length() == 0) {
+        // Validate country code if country codes are configured
+        Set<String> countryCodes = getValidCountryCodes();
+        String countryCode = extractCountryCode(phoneNumber);
+
+        if (!countryCodes.isEmpty()) {
+            // FIXED: If country codes exist, require a valid country code
+            if (countryCode == null || !countryCodes.contains(countryCode)) {
+                return false; // Reject if no valid country code found
+            }
+        }
+
+        // Check for dummy numbers (all same digit in local part)
+        if (isLocalPartAllSameDigit(digitsOnly, countryCode)) {
             return false;
         }
 
-        // Validate country code if Country__c records exist
-        String countryCode = extractCountryCode(phoneNumber);
-        Set<String> codes = getValidCountryCodes();
-
-        if (!codes.isEmpty()) {
-            // Country codes are configured - validate against them
-            if (countryCode == null) {
-                return false; // Invalid country code
-            }
-
-            // Check for dummy patterns in local part (after country code)
-            if (isLocalPartAllSameDigit(digitsOnly, countryCode.length())) {
-                return false;
-            }
-        } else {
-            // No country codes configured - use default 3-digit skip
-            if (isLocalPartAllSameDigit(digitsOnly, 3)) {
-                return false;
-            }
-        }
-
-        // Format validation: allowed characters only
+        // Basic format validation
         String regex = '^\\+\\d[\\d\\s\\-\\(\\)\\.]{4,48}(;\\d{1,10})?$';
         return Pattern.matches(regex, phoneNumber);
     }
@@ -267,9 +261,12 @@ public class PhoneNumberUtil {
     /**
      * Checks if the local part (after country code) is all the same digit
      * @param digits All digits from the phone number
-     * @param countryCodeLength Length of the country code to skip
+     * @param countryCode The country code string (or null if not found)
      */
-    private static Boolean isLocalPartAllSameDigit(String digits, Integer countryCodeLength) {
+    private static Boolean isLocalPartAllSameDigit(String digits, String countryCode) {
+        // Determine country code length (default to 3 if no country code)
+        Integer countryCodeLength = (countryCode != null) ? countryCode.length() : 3;
+
         // Need enough digits for country code + local part
         if (digits.length() <= countryCodeLength) {
             return false;
