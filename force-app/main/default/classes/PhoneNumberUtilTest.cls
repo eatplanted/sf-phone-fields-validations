@@ -323,8 +323,12 @@ private class PhoneNumberUtilTest {
         // Invalid country codes should fail
         System.assert(!PhoneNumberUtil.isValidFormat('+99 12 345 6789'),
             'Number with invalid country code 99 should be invalid');
-        System.assert(!PhoneNumberUtil.isValidFormat('+123 456 7890'),
-            'Number with invalid country code 123 should be invalid');
+        System.assert(!PhoneNumberUtil.isValidFormat('+999 456 7890'),
+            'Number with invalid country code 999 should be invalid');
+
+        // +123 is valid because it matches country code 1 (US)
+        System.assert(PhoneNumberUtil.isValidFormat('+123 456 7890'),
+            '+123 should be valid as it matches country code 1');
 
         Test.stopTest();
     }
