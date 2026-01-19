@@ -89,14 +89,34 @@ private class PhoneNumberUtilTest {
     
     @isTest
     static void testStandardizeExtension_Blank() {
-        System.assertEquals(null, 
+        System.assertEquals(null,
             PhoneNumberUtil.standardizeExtension(null),
             'Null should return null');
-        System.assertEquals('', 
+        System.assertEquals('',
             PhoneNumberUtil.standardizeExtension(''),
             'Empty string should return empty string');
     }
-    
+
+    @isTest
+    static void testStandardizeExtension_DoubleZeroPrefix() {
+        System.assertEquals('+41 44 123 4567',
+            PhoneNumberUtil.standardizeExtension('0041 44 123 4567'),
+            '0041 should convert to +41');
+        System.assertEquals('+49 30 123456',
+            PhoneNumberUtil.standardizeExtension('0049 30 123456'),
+            '0049 should convert to +49');
+        System.assertEquals('+1 555 123 4567',
+            PhoneNumberUtil.standardizeExtension('001 555 123 4567'),
+            '001 should convert to +1');
+        System.assertEquals('+41 44 123 4567;100',
+            PhoneNumberUtil.standardizeExtension('0041 44 123 4567 ext 100'),
+            '00 prefix with extension should convert both');
+        // Edge case: just "00" should not convert to just "+"
+        System.assertEquals('00',
+            PhoneNumberUtil.standardizeExtension('00'),
+            'Just 00 should remain unchanged');
+    }
+
     @isTest
     static void testStandardizeExtension_FormattingCleanup() {
         System.assertEquals('+41 (44) 333-4455;890', 
@@ -122,14 +142,37 @@ private class PhoneNumberUtilTest {
     
     @isTest
     static void testIsValidFormat_Invalid() {
-        System.assert(!PhoneNumberUtil.isValidFormat('044 123 4567'), 
+        System.assert(!PhoneNumberUtil.isValidFormat('044 123 4567'),
             'Missing country code should be invalid');
-        System.assert(!PhoneNumberUtil.isValidFormat('+'), 
+        System.assert(!PhoneNumberUtil.isValidFormat('+'),
             'Just plus sign should be invalid');
-        System.assert(!PhoneNumberUtil.isValidFormat('+41'), 
+        System.assert(!PhoneNumberUtil.isValidFormat('+41 123'),
+            'Too few digits should be invalid');
+        System.assert(!PhoneNumberUtil.isValidFormat('+41'),
             'Too short should be invalid');
     }
-    
+
+    @isTest
+    static void testIsValidFormat_DummyNumbers() {
+        // All same digit patterns - should be invalid
+        System.assert(!PhoneNumberUtil.isValidFormat('+41 00 000 0000'),
+            'All zeros should be invalid');
+        System.assert(!PhoneNumberUtil.isValidFormat('+11 11 111 1111'),
+            'All ones should be invalid');
+        System.assert(!PhoneNumberUtil.isValidFormat('+99 99 999 9999'),
+            'All nines should be invalid');
+
+        // Sequential patterns - should be valid (not blocked)
+        System.assert(PhoneNumberUtil.isValidFormat('+12 34 567 8901'),
+            'Sequential ascending should be valid');
+        System.assert(PhoneNumberUtil.isValidFormat('+98 76 543 2109'),
+            'Sequential descending should be valid');
+
+        // Partial repetition - should be valid
+        System.assert(PhoneNumberUtil.isValidFormat('+41 44 111 2233'),
+            'Partial repetition should be valid');
+    }
+
     @isTest
     static void testIntegration_Account() {
         Account acc = new Account(
