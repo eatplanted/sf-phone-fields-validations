@@ -427,4 +427,158 @@ private class PhoneNumberUtilTest {
 
         Test.stopTest();
     }
+
+    @isTest
+    static void testGetPhoneCodeByIso() {
+        // Create test country records
+        List<Country__c> countries = new List<Country__c>{
+            new Country__c(Name = 'Switzerland', ISO_Code__c = 'CH', Phone_Country_Code__c = '41'),
+            new Country__c(Name = 'Germany', ISO_Code__c = 'DE', Phone_Country_Code__c = '49'),
+            new Country__c(Name = 'United States', ISO_Code__c = 'US', Phone_Country_Code__c = '1')
+        };
+        insert countries;
+
+        PhoneNumberUtil.clearCache();
+
+        Test.startTest();
+
+        // Valid ISO codes
+        System.assertEquals('41', PhoneNumberUtil.getPhoneCodeByIso('CH'),
+            'Should return 41 for Switzerland');
+        System.assertEquals('49', PhoneNumberUtil.getPhoneCodeByIso('DE'),
+            'Should return 49 for Germany');
+        System.assertEquals('1', PhoneNumberUtil.getPhoneCodeByIso('US'),
+            'Should return 1 for United States');
+
+        // Case insensitive
+        System.assertEquals('41', PhoneNumberUtil.getPhoneCodeByIso('ch'),
+            'Should handle lowercase ISO code');
+        System.assertEquals('41', PhoneNumberUtil.getPhoneCodeByIso('Ch'),
+            'Should handle mixed case ISO code');
+
+        // Invalid/null cases
+        System.assertEquals(null, PhoneNumberUtil.getPhoneCodeByIso('ZZ'),
+            'Should return null for unknown ISO code');
+        System.assertEquals(null, PhoneNumberUtil.getPhoneCodeByIso(null),
+            'Should return null for null input');
+        System.assertEquals(null, PhoneNumberUtil.getPhoneCodeByIso(''),
+            'Should return null for empty string');
+
+        Test.stopTest();
+    }
+
+    @isTest
+    static void testGetIsoCodesByPhoneCode() {
+        // Create test country records - US and Canada share code 1
+        List<Country__c> countries = new List<Country__c>{
+            new Country__c(Name = 'Switzerland', ISO_Code__c = 'CH', Phone_Country_Code__c = '41'),
+            new Country__c(Name = 'United States', ISO_Code__c = 'US', Phone_Country_Code__c = '1'),
+            new Country__c(Name = 'Canada', ISO_Code__c = 'CA', Phone_Country_Code__c = '1')
+        };
+        insert countries;
+
+        PhoneNumberUtil.clearCache();
+
+        Test.startTest();
+
+        // Single country for code
+        Set<String> swissIso = PhoneNumberUtil.getIsoCodesByPhoneCode('41');
+        System.assertEquals(1, swissIso.size(), 'Should return one ISO code for 41');
+        System.assert(swissIso.contains('CH'), 'Should contain CH for code 41');
+
+        // Multiple countries share code 1
+        Set<String> northAmericaIso = PhoneNumberUtil.getIsoCodesByPhoneCode('1');
+        System.assertEquals(2, northAmericaIso.size(), 'Should return two ISO codes for 1');
+        System.assert(northAmericaIso.contains('US'), 'Should contain US for code 1');
+        System.assert(northAmericaIso.contains('CA'), 'Should contain CA for code 1');
+
+        // Invalid/null cases
+        Set<String> unknownIso = PhoneNumberUtil.getIsoCodesByPhoneCode('999');
+        System.assertEquals(0, unknownIso.size(), 'Should return empty set for unknown code');
+
+        Set<String> nullIso = PhoneNumberUtil.getIsoCodesByPhoneCode(null);
+        System.assertEquals(0, nullIso.size(), 'Should return empty set for null');
+
+        Test.stopTest();
+    }
+
+    @isTest
+    static void testMatchesCountry() {
+        // Create test country records
+        List<Country__c> countries = new List<Country__c>{
+            new Country__c(Name = 'Switzerland', ISO_Code__c = 'CH', Phone_Country_Code__c = '41'),
+            new Country__c(Name = 'Germany', ISO_Code__c = 'DE', Phone_Country_Code__c = '49'),
+            new Country__c(Name = 'United States', ISO_Code__c = 'US', Phone_Country_Code__c = '1')
+        };
+        insert countries;
+
+        PhoneNumberUtil.clearCache();
+
+        Test.startTest();
+
+        // Matching phone and country
+        System.assert(PhoneNumberUtil.matchesCountry('+41 44 123 4567', 'CH'),
+            'Swiss number should match CH');
+        System.assert(PhoneNumberUtil.matchesCountry('+49 30 123 4567', 'DE'),
+            'German number should match DE');
+        System.assert(PhoneNumberUtil.matchesCountry('+1 555 123 4567', 'US'),
+            'US number should match US');
+
+        // Non-matching phone and country
+        System.assert(!PhoneNumberUtil.matchesCountry('+41 44 123 4567', 'DE'),
+            'Swiss number should not match DE');
+        System.assert(!PhoneNumberUtil.matchesCountry('+49 30 123 4567', 'CH'),
+            'German number should not match CH');
+
+        // Blank values should pass (allow blank)
+        System.assert(PhoneNumberUtil.matchesCountry(null, 'CH'),
+            'Null phone should pass');
+        System.assert(PhoneNumberUtil.matchesCountry('', 'CH'),
+            'Empty phone should pass');
+        System.assert(PhoneNumberUtil.matchesCountry('+41 44 123 4567', null),
+            'Null ISO should pass');
+        System.assert(PhoneNumberUtil.matchesCountry('+41 44 123 4567', ''),
+            'Empty ISO should pass');
+
+        // Unknown country should pass (skip validation)
+        System.assert(PhoneNumberUtil.matchesCountry('+41 44 123 4567', 'ZZ'),
+            'Unknown country should pass validation');
+
+        Test.stopTest();
+    }
+
+    @isTest
+    static void testGetIsoCodeFromPhone() {
+        // Create test country records
+        List<Country__c> countries = new List<Country__c>{
+            new Country__c(Name = 'Switzerland', ISO_Code__c = 'CH', Phone_Country_Code__c = '41'),
+            new Country__c(Name = 'United States', ISO_Code__c = 'US', Phone_Country_Code__c = '1'),
+            new Country__c(Name = 'Canada', ISO_Code__c = 'CA', Phone_Country_Code__c = '1')
+        };
+        insert countries;
+
+        PhoneNumberUtil.clearCache();
+
+        Test.startTest();
+
+        // Single country for code
+        System.assertEquals('CH', PhoneNumberUtil.getIsoCodeFromPhone('+41 44 123 4567'),
+            'Should return CH for Swiss number');
+
+        // Multiple countries share code - returns first alphabetically
+        System.assertEquals('CA', PhoneNumberUtil.getIsoCodeFromPhone('+1 555 123 4567'),
+            'Should return CA (first alphabetically) for +1 number');
+
+        // Invalid cases
+        System.assertEquals(null, PhoneNumberUtil.getIsoCodeFromPhone('+999 123 4567'),
+            'Should return null for unknown country code');
+        System.assertEquals(null, PhoneNumberUtil.getIsoCodeFromPhone(null),
+            'Should return null for null input');
+        System.assertEquals(null, PhoneNumberUtil.getIsoCodeFromPhone(''),
+            'Should return null for empty string');
+        System.assertEquals(null, PhoneNumberUtil.getIsoCodeFromPhone('41 44 123 4567'),
+            'Should return null for number without +');
+
+        Test.stopTest();
+    }
 }

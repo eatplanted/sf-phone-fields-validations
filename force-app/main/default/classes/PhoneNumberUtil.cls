@@ -3,21 +3,120 @@ public class PhoneNumberUtil {
     // Cached set of valid country codes from Country__c
     private static Set<String> validCountryCodes;
 
+    // Cached map of ISO code to phone country code
+    private static Map<String, String> isoToPhoneCode;
+
+    // Cached map of phone country code to ISO codes (multiple countries can share same code)
+    private static Map<String, Set<String>> phoneCodeToIso;
+
     /**
      * Gets valid country codes from Country__c (cached for performance)
      */
     public static Set<String> getValidCountryCodes() {
         if (validCountryCodes == null) {
-            validCountryCodes = new Set<String>();
-            for (Country__c country : [
-                SELECT Phone_Country_Code__c
-                FROM Country__c
-                WHERE Phone_Country_Code__c != null
-            ]) {
-                validCountryCodes.add(country.Phone_Country_Code__c);
-            }
+            loadCountryData();
         }
         return validCountryCodes;
+    }
+
+    /**
+     * Gets the phone country code for a given ISO code
+     * @param isoCode The 2-letter ISO country code (e.g., 'CH', 'US')
+     * @return The phone country code (e.g., '41', '1') or null if not found
+     */
+    public static String getPhoneCodeByIso(String isoCode) {
+        if (String.isBlank(isoCode)) {
+            return null;
+        }
+        if (isoToPhoneCode == null) {
+            loadCountryData();
+        }
+        return isoToPhoneCode.get(isoCode.toUpperCase());
+    }
+
+    /**
+     * Gets the ISO codes for a given phone country code
+     * @param phoneCode The phone country code (e.g., '41', '1')
+     * @return Set of ISO codes that use this phone code, or empty set if not found
+     */
+    public static Set<String> getIsoCodesByPhoneCode(String phoneCode) {
+        if (String.isBlank(phoneCode)) {
+            return new Set<String>();
+        }
+        if (phoneCodeToIso == null) {
+            loadCountryData();
+        }
+        Set<String> isoCodes = phoneCodeToIso.get(phoneCode);
+        return isoCodes != null ? isoCodes : new Set<String>();
+    }
+
+    /**
+     * Validates that a phone number matches a specific country's code
+     * @param phoneNumber The phone number to validate
+     * @param isoCode The expected country ISO code (e.g., 'CH', 'US')
+     * @return true if phone number starts with the country's code, false otherwise
+     */
+    public static Boolean matchesCountry(String phoneNumber, String isoCode) {
+        if (String.isBlank(phoneNumber) || String.isBlank(isoCode)) {
+            return true; // Allow blank values
+        }
+
+        String expectedPhoneCode = getPhoneCodeByIso(isoCode);
+        if (expectedPhoneCode == null) {
+            return true; // Country not configured, skip validation
+        }
+
+        String actualPhoneCode = extractCountryCode(phoneNumber);
+        return expectedPhoneCode.equals(actualPhoneCode);
+    }
+
+    /**
+     * Gets the ISO code from a phone number (returns first match if multiple countries share the code)
+     * @param phoneNumber The phone number
+     * @return The ISO code or null if not found
+     */
+    public static String getIsoCodeFromPhone(String phoneNumber) {
+        String phoneCode = extractCountryCode(phoneNumber);
+        if (phoneCode == null) {
+            return null;
+        }
+        Set<String> isoCodes = getIsoCodesByPhoneCode(phoneCode);
+        if (isoCodes.isEmpty()) {
+            return null;
+        }
+        // Return first ISO code (alphabetically)
+        List<String> sortedCodes = new List<String>(isoCodes);
+        sortedCodes.sort();
+        return sortedCodes[0];
+    }
+
+    /**
+     * Loads country data from Country__c into caches
+     */
+    private static void loadCountryData() {
+        validCountryCodes = new Set<String>();
+        isoToPhoneCode = new Map<String, String>();
+        phoneCodeToIso = new Map<String, Set<String>>();
+
+        for (Country__c country : [
+            SELECT ISO_Code__c, Phone_Country_Code__c
+            FROM Country__c
+            WHERE Phone_Country_Code__c != null
+        ]) {
+            String phoneCode = country.Phone_Country_Code__c;
+            String isoCode = country.ISO_Code__c;
+
+            validCountryCodes.add(phoneCode);
+
+            if (String.isNotBlank(isoCode)) {
+                isoToPhoneCode.put(isoCode.toUpperCase(), phoneCode);
+
+                if (!phoneCodeToIso.containsKey(phoneCode)) {
+                    phoneCodeToIso.put(phoneCode, new Set<String>());
+                }
+                phoneCodeToIso.get(phoneCode).add(isoCode.toUpperCase());
+            }
+        }
     }
 
     /**
@@ -26,6 +125,8 @@ public class PhoneNumberUtil {
     @TestVisible
     private static void clearCache() {
         validCountryCodes = null;
+        isoToPhoneCode = null;
+        phoneCodeToIso = null;
     }
 
     /**
