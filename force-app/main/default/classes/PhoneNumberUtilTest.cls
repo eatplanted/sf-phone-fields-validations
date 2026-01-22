@@ -272,12 +272,18 @@ private class PhoneNumberUtilTest {
     
     @isTest
     static void testBulk_MultipleRecords() {
+        // Create test country record for Switzerland
+        insert new Country__c(Name = 'Switzerland', ISO_Code__c = 'CH', Phone_Country_Code__c = '41');
+        PhoneNumberUtil.clearCache();
+
         List<Contact> contacts = new List<Contact>();
         for (Integer i = 0; i < 200; i++) {
+            // Generate phone numbers with at least 7 digits and valid Swiss country code
+            String localPart = String.valueOf(1000000 + i).right(7);
             contacts.add(new Contact(
                 FirstName = 'Bulk',
                 LastName = 'Test' + i,
-                Phone = '+41 44 ' + Math.mod(i, 999) + ' ' + Math.mod(i * 2, 9999) + 'x' + i
+                Phone = '+41 44 ' + localPart + 'x' + Math.mod(i, 100)
             ));
         }
 
